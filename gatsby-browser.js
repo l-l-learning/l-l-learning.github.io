@@ -1,10 +1,10 @@
-// custom typefaces
-import "@fontsource-variable/montserrat"
-import "@fontsource/merriweather"
-// normalize CSS across browsers
-import "./src/normalize.css"
-// custom CSS styles
-import "./src/style.css"
+import './src/styles/normalize.css'
+import './src/styles/style.css'
 
-// Highlighting for code blocks
-import "prismjs/themes/prism.css"
+// import '@fontsource/roboto'
+// import '@fontsource/noto-sans'
+// import '@fontsource/noto-sans-jp'
+// import '@fontsource/noto-serif'
+// import '@fontsource/noto-serif-jp'
+// import '@fontsource/source-sans-pro'
+// import '@fontsource/raleway'
