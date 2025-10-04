@@ -1,13 +1,13 @@
-import * as React from "react"
-import { Link, graphql } from "gatsby"
+import * as React from 'react'
+import { Link, graphql } from 'gatsby'
 
-import Bio from "../components/bio"
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+import Bio from '../components/bio'
+import Layout from '../components/layout'
+import Seo from '../components/seo'
 
 const BlogPostTemplate = ({
   data: { previous, next, site, markdownRemark: post },
-  location,
+  location
 }) => {
   const siteTitle = site.siteMetadata?.title || `Title`
 
@@ -38,7 +38,7 @@ const BlogPostTemplate = ({
             flexWrap: `wrap`,
             justifyContent: `space-between`,
             listStyle: `none`,
-            padding: 0,
+            padding: 0
           }}
         >
           <li>
