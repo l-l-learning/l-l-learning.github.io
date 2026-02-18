@@ -1,12 +1,21 @@
 const path = require(`path`)
+const _ = require('lodash')
 const { createFilePath } = require(`gatsby-source-filesystem`)
-const blogPost = path.resolve(`./src/templates/blog-post.js`)
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
+
+  // Define templates
+  const postTemplate = path.resolve(`./src/templates/post.js`)
+  const tagTemplate = path.resolve('src/templates/tag.js')
+
+  // Get all markdown blog posts sorted by date
   const result = await graphql(`
     {
-      allMarkdownRemark(sort: { frontmatter: { date: ASC } }, limit: 1000) {
+      allMarkdownRemark(
+        sort: { fields: [frontmatter___date], order: ASC }
+        limit: 100
+      ) {
         nodes {
           id
           fields {
@@ -14,24 +23,40 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
       }
+      tagsGroup: allMarkdownRemark(limit: 100) {
+        group(field: frontmatter___tag) {
+          fieldValue
+        }
+      }
     }
   `)
 
+  // Create Pages
   const posts = result.data.allMarkdownRemark.nodes
-
-  posts.forEach((post, index) => {
-    const previousPostId = index === 0 ? null : posts[index - 1].id
-    const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id
-    createPage({
-      path: post.fields.slug,
-      component: blogPost,
-      context: {
-        id: post.id,
-        previousPostId,
-        nextPostId
-      }
+  if (posts.length > 0) {
+    posts.forEach(post => {
+      createPage({
+        path: post.fields.slug,
+        component: postTemplate,
+        context: {
+          id: post.id,
+          previousPostId,
+          nextPostId
+        }
+      })
     })
-  })
+
+    const tags = result.data.tagsGroup.group
+    tags.forEach(tag => {
+      createPage({
+        path: `/tags/${_.kebabCase(tag.fieldValue)}/`,
+        component: tagTemplate,
+        context: {
+          tag: tag.fieldValue
+        }
+      })
+    })
+  }
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
@@ -70,7 +95,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       description: String
       date: Date @dateformat
 			update: Date @dateformat
-      keywords: String
+      tag: [String]
       summary: String
     }
 

@@ -9,6 +9,10 @@ const Seo = ({ title, children }) => {
           siteMetadata {
             title
             siteUrl
+            description
+            author {
+              name
+            }
           }
         }
       }
@@ -17,6 +21,7 @@ const Seo = ({ title, children }) => {
 
   const defaultTitle = site.siteMetadata.title
   const siteUrl = site.siteMetadata.siteUrl
+  const metaDescription = site.siteMetadata.title
 
   return (
     <>
